@@ -38,12 +38,12 @@ public:
     Soa() {}
     ~Soa() {}
 
-    size_t size() const { return array1.size(); }
-    bool empty() const { return array1.empty(); }
-    size_t capacity() const { return array1.capacity(); }
+    size_t size() const noexcept { return array1.size(); }
+    bool empty() const noexcept { return array1.empty(); }
+    size_t capacity() const noexcept { return array1.capacity(); }
     void emplace_back(T &&t1, T &&t2);
     void push_back(T &&t1, T &&t2);
-    void clear();
+    void clear() noexcept;
 
 private:
 
