@@ -17,12 +17,30 @@
  */
 
 #pragma once
+#include<vector>
 
+template<typename T>
 class Soa final {
 public:
     Soa() {}
     ~Soa() {}
 
+    size_t size() { return array1.size(); }
+    bool empty() { return array1.empty(); }
+    size_t capacity() { return array1.capacity(); }
+
 private:
 
+    struct SoaItem {
+        T item1;
+        T item2;
+    };
+
+    struct SoaItemRef {
+        T &item1;
+        t &item2;
+    };
+
+    std::vector<T> array1;
+    std::vector<T> array2;
 };

@@ -2,7 +2,7 @@
 #include<cassert>
 
 void basic() {
-    Soa foo;
+    Soa<int> foo;
     assert(true);
 }
 
