@@ -26,7 +26,20 @@ void indexing() {
     assert(item.item2 == -1);
 }
 
+void iterator() {
+    Soa<int> foo;
+    assert(foo.begin() == foo.end());
+    foo.push_back(4, 4);
+    auto start = foo.begin();
+    auto stop = foo.end();
+    assert(start != stop);
+    assert(!(start == stop));
+    start++;
+    assert(start == stop);
+}
+
 int main(int, char **) {
     basic();
     indexing();
+    iterator();
 }

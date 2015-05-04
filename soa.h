@@ -30,6 +30,41 @@ public:
     SoaIterator(C &container, size_t index) : container(&container), index(index) {
     }
 
+    SoaIterator(const SoaIterator<C, T> &other) {
+        container = other.container;
+        index = other.index;
+    }
+
+    bool operator==(const SoaIterator<C, T> &other) const {
+        return index == other.index;
+    }
+
+    bool operator!=(const SoaIterator<C, T> &other) const {
+        return !(*this == other);
+    }
+
+    SoaIterator<C, T>& operator++() {
+        index++;
+        return *this;
+    }
+
+    SoaIterator<C, T> operator++(int) {
+        SoaIterator<C, T> old(*this);
+        index++;
+        return old;
+    }
+
+    SoaIterator<C, T>& operator--() {
+        index--;
+        return *this;
+    }
+
+    SoaIterator<C, T> operator--(int) {
+        SoaIterator<C, T> old(*this);
+        index--;
+        return old;
+    }
+
 private:
     C *container;
     size_t index;
@@ -64,6 +99,14 @@ public:
     void clear() noexcept;
 
     SoaItemRef operator[](size_t index);
+
+    SoaIterator<Soa<T>, T> begin() {
+        return SoaIterator<Soa<T>, T>(*this, 0);
+    }
+
+    SoaIterator<Soa<T>, T> end() {
+        return SoaIterator<Soa<T>, T>(*this, array1.size());
+    }
 
 private:
 
