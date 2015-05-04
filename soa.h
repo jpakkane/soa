@@ -21,6 +21,21 @@
 #include<utility>
 
 template<typename T>
+class Soa;
+
+template<typename C, typename T>
+class SoaIterator final {
+
+public:
+    SoaIterator(C &container, size_t index) : container(&container), index(index) {
+    }
+
+private:
+    C *container;
+    size_t index;
+};
+
+template<typename T>
 class Soa final {
 private:
 
@@ -32,6 +47,9 @@ private:
     struct SoaItemRef {
         T &item1;
         T &item2;
+        SoaItemRef(T &i1, T &i2) : item1(i1), item2(i2) {
+
+        }
     };
 
 public:
@@ -44,6 +62,8 @@ public:
     void emplace_back(T &&t1, T &&t2);
     void push_back(T &&t1, T &&t2);
     void clear() noexcept;
+
+    SoaItemRef operator[](size_t index);
 
 private:
 
@@ -64,7 +84,12 @@ void Soa<T>::push_back(T &&t1, T &&t2) {
 }
 
 template<typename T>
-void Soa<T>::clear() {
+void Soa<T>::clear() noexcept {
     array1.clear();
     array2.clear();
+}
+
+template<typename T>
+typename Soa<T>::SoaItemRef Soa<T>::operator[](size_t index) {
+    return SoaItemRef(array1[index], array2[index]);
 }

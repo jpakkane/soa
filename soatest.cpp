@@ -15,6 +15,18 @@ void basic() {
     assert(foo.empty());
 }
 
+void indexing() {
+    Soa<int> foo;
+    foo.push_back(4, -1);
+    assert(foo[0].item1 == 4);
+    assert(foo[0].item2 == -1);
+
+    auto item = foo[0];
+    assert(item.item1 == 4);
+    assert(item.item2 == -1);
+}
+
 int main(int, char **) {
     basic();
+    indexing();
 }
