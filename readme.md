@@ -12,7 +12,7 @@ of a structure of arrays. What this means is that instead of doing this:
     std::vector<Foo> myObj;
 
 
-You instead do something like this:
+You do something like this:
 
     Soa<int, std::string, FooObj> myObj;
 

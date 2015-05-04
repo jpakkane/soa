@@ -18,17 +18,10 @@
 
 #pragma once
 #include<vector>
+#include<utility>
 
 template<typename T>
 class Soa final {
-public:
-    Soa() {}
-    ~Soa() {}
-
-    size_t size() { return array1.size(); }
-    bool empty() { return array1.empty(); }
-    size_t capacity() { return array1.capacity(); }
-
 private:
 
     struct SoaItem {
@@ -38,9 +31,40 @@ private:
 
     struct SoaItemRef {
         T &item1;
-        t &item2;
+        T &item2;
     };
+
+public:
+    Soa() {}
+    ~Soa() {}
+
+    size_t size() const { return array1.size(); }
+    bool empty() const { return array1.empty(); }
+    size_t capacity() const { return array1.capacity(); }
+    void emplace_back(T &&t1, T &&t2);
+    void push_back(T &&t1, T &&t2);
+    void clear();
+
+private:
 
     std::vector<T> array1;
     std::vector<T> array2;
 };
+
+template<typename T>
+void Soa<T>::emplace_back(T &&t1, T &&t2) {
+    array1.emplace_back(std::forward<T>(t1));
+    array2.emplace_back(std::forward<T>(t2));
+}
+
+template<typename T>
+void Soa<T>::push_back(T &&t1, T &&t2) {
+    array1.push_back(std::forward<T>(t1));
+    array2.push_back(std::forward<T>(t2));
+}
+
+template<typename T>
+void Soa<T>::clear() {
+    array1.clear();
+    array2.clear();
+}
