@@ -1,5 +1,6 @@
 #include"soa.h"
 #include<cassert>
+#include<algorithm>
 
 void basic() {
     Soa<int> foo;
@@ -38,8 +39,21 @@ void iterator() {
     assert(start == stop);
 }
 
+void find() {
+    Soa<int> foo;
+    foo.push_back(1, 1);
+    foo.push_back(2, 2);
+    foo.push_back(3, 3);
+    foo.push_back(4, 4);
+    Soa<int>::SoaItem target{3, 3};
+
+    auto result = std::find(foo.begin(), foo.end(), target);
+    assert(std::distance(foo.begin(), result) == 2);
+}
+
 int main(int, char **) {
     basic();
     indexing();
     iterator();
+    find();
 }

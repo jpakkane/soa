@@ -27,6 +27,12 @@ template<typename C, typename T>
 class SoaIterator final {
 
 public:
+
+    typedef typename C::value_type value_type;
+    typedef value_type* pointer;
+    typedef value_type& reference;
+    typedef size_t difference_type;
+    typedef std::random_access_iterator_tag iterator_category;
     SoaIterator(C &container, size_t index) : container(&container), index(index) {
     }
 
@@ -65,6 +71,14 @@ public:
         return old;
     }
 
+    value_type operator*() {
+        return (*container)[index];
+    }
+
+    difference_type operator-(const SoaIterator<Soa<T>, T> &other) const {
+        return index - other.index;
+    }
+
 private:
     C *container;
     size_t index;
@@ -72,7 +86,7 @@ private:
 
 template<typename T>
 class Soa final {
-private:
+public:
 
     struct SoaItem {
         T item1;
@@ -83,11 +97,15 @@ private:
         T &item1;
         T &item2;
         SoaItemRef(T &i1, T &i2) : item1(i1), item2(i2) {
+        }
 
+        bool operator==(const SoaItem &i) const {
+            return item1 == i.item1 && item2 == i.item2;
         }
     };
 
-public:
+    typedef SoaItemRef value_type;
+
     Soa() {}
     ~Soa() {}
 
