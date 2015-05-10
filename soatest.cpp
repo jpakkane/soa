@@ -51,9 +51,28 @@ void find() {
     assert(std::distance(foo.begin(), result) == 2);
 }
 
+void sort() {
+    Soa<int> foo;
+    foo.push_back(4, 4);
+    foo.push_back(2, 2);
+    foo.push_back(1, 1);
+    foo.push_back(3, 3);
+    auto ordering = [](const Soa<int>::SoaItemRef &i1, const Soa<int>::SoaItemRef &i2) {
+        if(i1.item1 < i2.item1)
+            return true;
+        if(i2.item1 < i1.item1)
+            return false;
+        if(i1.item2 < i2.item2)
+            return true;
+        return false;
+    };
+    std::sort(foo.begin(), foo.end(), ordering);
+}
+
 int main(int, char **) {
     basic();
     indexing();
     iterator();
     find();
+    sort();
 }

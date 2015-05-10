@@ -33,6 +33,7 @@ public:
     typedef value_type& reference;
     typedef size_t difference_type;
     typedef std::random_access_iterator_tag iterator_category;
+
     SoaIterator(C &container, size_t index) : container(&container), index(index) {
     }
 
@@ -41,12 +42,45 @@ public:
         index = other.index;
     }
 
+    SoaIterator(SoaIterator<C, T> &&other) {
+        container = other.container;
+        index = other.index;
+        other.container = nullptr;
+        other.index = -1;
+    }
+
     bool operator==(const SoaIterator<C, T> &other) const {
         return index == other.index;
     }
 
     bool operator!=(const SoaIterator<C, T> &other) const {
         return !(*this == other);
+    }
+
+    bool operator<(const SoaIterator<C, T> &other) const {
+        return index < other.index;
+    }
+
+    bool operator>(const SoaIterator<C, T> &other) const {
+        return index > other.index;
+    }
+
+    bool operator>=(const SoaIterator<C, T> &other) const {
+        return index >= other.index;
+    }
+
+    bool operator<=(const SoaIterator<C, T> &other) const {
+        return index <= other.index;
+    }
+
+    SoaIterator<C, T> operator=(const SoaIterator<C, T> &other) {
+        this->index = other.index;
+        return *this;
+    }
+
+    SoaIterator<C, T>& operator+=(difference_type diff) {
+        index += diff;
+        return *this;
     }
 
     SoaIterator<C, T>& operator++() {
@@ -71,6 +105,12 @@ public:
         return old;
     }
 
+    SoaIterator<C, T> operator+(int i) const {
+        SoaIterator<C, T> rval(*this);
+        rval.index += i;
+        return rval;
+    }
+
     value_type operator*() {
         return (*container)[index];
     }
@@ -78,7 +118,13 @@ public:
     difference_type operator-(const SoaIterator<Soa<T>, T> &other) const {
         return index - other.index;
     }
-
+/*
+    void swap(SoaIterator<C, T> &other) {
+        Soa<C>::SoaItem tmp = (*container)[index];
+        (*container)[index] = (*other.container)[other.index];
+        (*other.container)[other.index] = tmp;
+    }
+*/
 private:
     C *container;
     size_t index;
@@ -102,6 +148,7 @@ public:
         bool operator==(const SoaItem &i) const {
             return item1 == i.item1 && item2 == i.item2;
         }
+
     };
 
     typedef SoaItemRef value_type;
