@@ -23,6 +23,82 @@
 template<typename T>
 class Soa;
 
+template<typename T>
+class ElementProxy final {
+private:
+    std::vector<T> *arr;
+    size_t index;
+public:
+    ElementProxy() = delete;
+    ElementProxy(std::vector<T> &v, size_t index) : arr(&v), index(index) {
+    }
+/*
+    operator T() {
+        return (*arr)[index];
+    }
+
+    operator T() const {
+        return (*arr)[index];
+    }
+*/
+    T& value() const noexcept {
+        return (*arr)[index];
+    }
+
+    ElementProxy<T>& operator=(const T &other) {
+        (*arr)[index] = other;
+        return *this;
+    }
+
+    void swap(ElementProxy<T> &other) {
+        T tmp((*arr)[index]);
+        (*arr)[index] = (*other.arr)[other.index];
+        (*other.arr)[other.index] = tmp;
+        printf("Elementproxy swap.\n");
+    }
+
+
+};
+
+namespace std {
+template<typename T>
+void swap(ElementProxy<T> &a, ElementProxy<T> &b) {
+    a.swap(b);
+}
+}
+
+template<typename T>
+struct StructProxy final {
+    ElementProxy<T> item1;
+    ElementProxy<T> item2;
+
+    StructProxy() = delete;
+    StructProxy(const ElementProxy<T> &i1, const ElementProxy<T> &i2) :
+        item1(i1), item2(i2) {
+    }
+
+    void swap(StructProxy<T> &other) {
+        std::swap(item1, other.item1);
+        std::swap(item2, other.item2);
+        printf("StructProxy swap.\n");
+    }
+};
+
+// For whatever reason, you need to have this in both std and
+// regular namespaces. std::swap takes the std:: one while
+// std::sort takes the other one. Weird.
+namespace std {
+template<typename T>
+void swap(StructProxy<T> &a, StructProxy<T> &b) {
+    a.swap(b);
+}
+}
+
+template<typename T>
+void swap(StructProxy<T> &a, StructProxy<T> &b) {
+    a.swap(b);
+}
+
 template<typename C, typename T>
 class SoaIterator final {
 
@@ -210,6 +286,18 @@ private:
     std::vector<T> array1;
     std::vector<T> array2;
 };
+
+namespace std {
+template<typename T>
+void swap(typename Soa<T>::SoaItemRef &a, typename Soa<T>::SoaItemRef &b) {
+    a.swap(b);
+}
+}
+
+template<typename T>
+void swap(typename Soa<T>::SoaItemRef &a, typename Soa<T>::SoaItemRef &b) {
+    a.swap(b);
+}
 
 template<typename T>
 void Soa<T>::emplace_back(T &&t1, T &&t2) {
