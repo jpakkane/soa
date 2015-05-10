@@ -271,7 +271,7 @@ public:
     void push_back(T &&t1, T &&t2);
     void clear() noexcept;
 
-    SoaItemRef operator[](size_t index);
+    value_type operator[](size_t index);
 
     SoaIterator<Soa<T>, T> begin() {
         return SoaIterator<Soa<T>, T>(*this, 0);
@@ -289,13 +289,13 @@ private:
 
 namespace std {
 template<typename T>
-void swap(typename Soa<T>::SoaItemRef &a, typename Soa<T>::SoaItemRef &b) {
+void swap(typename Soa<T>::value_type &a, typename Soa<T>::value_type &b) {
     a.swap(b);
 }
 }
 
 template<typename T>
-void swap(typename Soa<T>::SoaItemRef &a, typename Soa<T>::SoaItemRef &b) {
+void swap(typename Soa<T>::value_type &a, typename Soa<T>::value_type &b) {
     a.swap(b);
 }
 
@@ -318,6 +318,6 @@ void Soa<T>::clear() noexcept {
 }
 
 template<typename T>
-typename Soa<T>::SoaItemRef Soa<T>::operator[](size_t index) {
-    return SoaItemRef(array1[index], array2[index]);
+typename Soa<T>::value_type Soa<T>::operator[](size_t index) {
+    return Soa<T>::value_type(array1[index], array2[index]);
 }

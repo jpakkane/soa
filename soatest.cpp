@@ -137,6 +137,9 @@ void struct_test() {
     assert(v2[1] == 4);
     assert(p1.value() == 1);
     assert(p3.value() == 3);
+
+    sp1.item1 = 44;
+    assert(p1.value() == 44);
 }
 
 void sort_test2() {
