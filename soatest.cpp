@@ -2,7 +2,7 @@
 #include<cassert>
 #include<algorithm>
 
-void basic() {
+void basic_test() {
     Soa<int> foo;
     assert(true);
     assert(foo.size() == 0);
@@ -16,7 +16,7 @@ void basic() {
     assert(foo.empty());
 }
 
-void indexing() {
+void indexing_test() {
     Soa<int> foo;
     foo.push_back(4, -1);
     assert(foo[0].item1 == 4);
@@ -27,7 +27,7 @@ void indexing() {
     assert(item.item2 == -1);
 }
 
-void iterator() {
+void iterator_test() {
     Soa<int> foo;
     assert(foo.begin() == foo.end());
     foo.push_back(4, 4);
@@ -39,7 +39,7 @@ void iterator() {
     assert(start == stop);
 }
 
-void find() {
+void find_test() {
     Soa<int> foo;
     foo.push_back(1, 1);
     foo.push_back(2, 2);
@@ -51,7 +51,22 @@ void find() {
     assert(std::distance(foo.begin(), result) == 2);
 }
 
-void sort() {
+void swap_test() {
+    int one=1;
+    int two=2;
+    int three=3;
+    int four=4;
+    Soa<int>::SoaItemRef i1(one, two);
+    Soa<int>::SoaItemRef i2(three, four);
+    //std::swap(i1, i2);
+    i1.swap(i2);
+    assert(i1.item1 == 3);
+    assert(i1.item2 == 4);
+    assert(i2.item1 == 1);
+    assert(i2.item2 == 2);
+}
+
+void sort_test() {
     Soa<int> foo;
     foo.push_back(4, 4);
     foo.push_back(2, 2);
@@ -67,12 +82,18 @@ void sort() {
         return false;
     };
     std::sort(foo.begin(), foo.end(), ordering);
+    for(const auto &i : foo) {
+        printf("%d %d\n", i.item1, i.item2);
+    }
+    assert(foo[0].item1 == 1);
+    assert(foo[3].item2 == 4);
 }
 
 int main(int, char **) {
-    basic();
-    indexing();
-    iterator();
-    find();
-    sort();
+    basic_test();
+    indexing_test();
+    iterator_test();
+    find_test();
+    swap_test();
+    sort_test();
 }

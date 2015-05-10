@@ -78,6 +78,11 @@ public:
         return *this;
     }
 
+    SoaIterator<C, T> operator=(SoaIterator<C, T> &&other) {
+        this->index = other.index;
+        return *this;
+    }
+
     SoaIterator<C, T>& operator+=(difference_type diff) {
         index += diff;
         return *this;
@@ -111,21 +116,17 @@ public:
         return rval;
     }
 
-    value_type operator*() {
-        return (*container)[index];
+    value_type& operator*() {
+        new(proxy) value_type((*container)[index]);
+        return *(reinterpret_cast<value_type*>(proxy));
     }
 
     difference_type operator-(const SoaIterator<Soa<T>, T> &other) const {
         return index - other.index;
     }
-/*
-    void swap(SoaIterator<C, T> &other) {
-        Soa<C>::SoaItem tmp = (*container)[index];
-        (*container)[index] = (*other.container)[other.index];
-        (*other.container)[other.index] = tmp;
-    }
-*/
+
 private:
+    char proxy[sizeof(value_type)];
     C *container;
     size_t index;
 };
@@ -145,12 +146,43 @@ public:
         SoaItemRef(T &i1, T &i2) : item1(i1), item2(i2) {
         }
 
-        bool operator==(const SoaItem &i) const {
+        SoaItemRef(SoaItemRef && other) noexcept : item1(other.item1), item2(other.item2) {
+        }
+
+        SoaItemRef(const Soa<T>::SoaItemRef &other) noexcept : item1(other.item1), item2(other.item2) {
+        }
+
+        bool operator==(const Soa<T>::SoaItem &i) const noexcept {
             return item1 == i.item1 && item2 == i.item2;
         }
 
-    };
+        bool operator==(const Soa<T>::SoaItemRef &i) const noexcept {
+            return item1 == i.item1 && item2 == i.item2;
+        }
 
+        SoaItemRef& operator=(Soa<T>::SoaItemRef &&other) noexcept {
+            item1 = other.item1;
+            item2 = other.item2;
+            return *this;
+        }
+
+        SoaItemRef& operator=(const Soa<T>::SoaItemRef &other) noexcept {
+            item1 = other.item1;
+            item2 = other.item2;
+            return *this;
+        }
+
+        void swap(const Soa<T>::SoaItemRef &i) {
+            T tmp;
+            tmp = item1;
+            item1 = i.item1;
+            i.item1 = tmp;
+
+            tmp = item2;
+            item2 = i.item2;
+            i.item2 = tmp;
+        }
+    };
     typedef SoaItemRef value_type;
 
     Soa() {}
