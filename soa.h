@@ -54,7 +54,6 @@ public:
         T tmp((*arr)[index]);
         (*arr)[index] = (*other.arr)[other.index];
         (*other.arr)[other.index] = tmp;
-        printf("Elementproxy swap.\n");
     }
 
 
@@ -80,7 +79,6 @@ struct StructProxy final {
     void swap(StructProxy<T> &other) {
         std::swap(item1, other.item1);
         std::swap(item2, other.item2);
-        printf("StructProxy swap.\n");
     }
 };
 
@@ -247,7 +245,6 @@ struct SoaItemRef {
     }
 
     void swap(const SoaItemRef<T> &i) {
-        printf("Calling itemref swap.\n");
         T tmp;
         tmp = item1;
         item1 = i.item1;

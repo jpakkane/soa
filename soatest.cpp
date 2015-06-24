@@ -89,10 +89,13 @@ void sort_test() {
         return false;
     };
     std::sort(foo.begin(), foo.end(), ordering);
+/*
     for(const auto &i : foo) {
         printf("%d %d\n", i.item1, i.item2);
     }
+    */
     assert(foo[0].item1 == 1);
+    assert(foo[0].item2 == 1);
     assert(foo[3].item2 == 4);
 }
 
@@ -149,26 +152,21 @@ void sort_test2() {
         combined.emplace_back(ElementProxy<int>(v1, i), ElementProxy<int>(v2, i));
     }
     auto ordering = [](const StructProxy<int> &p1, const StructProxy<int> &p2) {
-        printf("%d %d\n", p1.item2.value(), p2.item2.value());
+        //printf("%d %d\n", p1.item2.value(), p2.item2.value());
         return p1.item2.value() < p2.item2.value();
     };
-/*
-    printf("Sort test\n");
-    print_vector(v1);
-    print_vector(v2);
-*/
-    std::swap(*combined.begin(), *(combined.begin()+1));
-
-    /*
-    print_vector(v1);
-    print_vector(v2);
-    */
     std::sort(combined.begin(), combined.end(), ordering);
-    /*
-    print_vector(v1);
-    print_vector(v2);
-    */
     assert(v1[0] == 4);
+    assert(v1[1] == 3);
+    assert(v1[2] == 2);
+    assert(v1[3] == 1);
+    assert(v1[4] == 0);
+
+    assert(v2[0] == 0);
+    assert(v2[1] == 1);
+    assert(v2[2] == 2);
+    assert(v2[3] == 3);
+    assert(v2[4] == 4);
 }
 
 int main(int, char **) {
@@ -180,5 +178,5 @@ int main(int, char **) {
     struct_test();
     swap_test();
     sort_test();
-    //sort_test2();
+    sort_test2();
 }
