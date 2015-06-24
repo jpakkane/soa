@@ -9,7 +9,7 @@ void print_vector(const std::vector<int> &v) {
     }
     printf("\n");
 }
-
+#if 0
 void basic_test() {
     Soa<int> foo;
     assert(true);
@@ -58,16 +58,15 @@ void find_test() {
     auto result = std::find(foo.begin(), foo.end(), target);
     assert(std::distance(foo.begin(), result) == 2);
 }
-
+#endif
 void swap_test() {
     int one=1;
     int two=2;
     int three=3;
     int four=4;
-    Soa<int>::SoaItemRef i1(one, two);
-    Soa<int>::SoaItemRef i2(three, four);
+    Soa<int>::value_type i1(one, two);
+    Soa<int>::value_type i2(three, four);
     std::swap(i1, i2);
-    //i1.swap(i2);
     assert(i1.item1 == 3);
     assert(i1.item2 == 4);
     assert(i2.item1 == 1);
@@ -80,7 +79,7 @@ void sort_test() {
     foo.push_back(2, 2);
     foo.push_back(1, 1);
     foo.push_back(3, 3);
-    auto ordering = [](const Soa<int>::SoaItemRef &i1, const Soa<int>::SoaItemRef &i2) {
+    auto ordering = [](const Soa<int>::value_type &i1, const Soa<int>::value_type &i2) {
         if(i1.item1 < i2.item1)
             return true;
         if(i2.item1 < i1.item1)
@@ -96,7 +95,7 @@ void sort_test() {
     assert(foo[0].item1 == 1);
     assert(foo[3].item2 == 4);
 }
-
+#if 0
 void elem_test() {
     std::vector<int> foobar{0, 1, 2, 3, 4};
     ElementProxy<int> p1(foobar, 0);
@@ -171,15 +170,16 @@ void sort_test2() {
     */
     assert(v1[0] == 4);
 }
-
+#endif
 int main(int, char **) {
+    /*
     basic_test();
     indexing_test();
     iterator_test();
     find_test();
     elem_test();
-    struct_test();
-    //swap_test();
-    //sort_test();
-    sort_test2();
+    struct_test();*/
+    swap_test();
+    sort_test();
+    //sort_test2();
 }

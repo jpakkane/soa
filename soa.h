@@ -208,58 +208,74 @@ private:
 };
 
 template<typename T>
+struct SoaItem {
+    T item1;
+    T item2;
+};
+
+template<typename T>
+struct SoaItemRef {
+    T &item1;
+    T &item2;
+    SoaItemRef(T &i1, T &i2) : item1(i1), item2(i2) {
+    }
+
+    SoaItemRef(SoaItemRef<T> && other) noexcept : item1(other.item1), item2(other.item2) {
+    }
+
+    SoaItemRef(const SoaItemRef<T> &other) noexcept : item1(other.item1), item2(other.item2) {
+    }
+
+    bool operator==(SoaItem<T> &i) const noexcept {
+        return item1 == i.item1 && item2 == i.item2;
+    }
+
+    bool operator==(SoaItemRef<T> &i) const noexcept {
+        return item1 == i.item1 && item2 == i.item2;
+    }
+
+    SoaItemRef& operator=(SoaItemRef<T> &&other) noexcept {
+        item1 = other.item1;
+        item2 = other.item2;
+        return *this;
+    }
+
+    SoaItemRef& operator=(const SoaItemRef<T> &other) noexcept {
+        item1 = other.item1;
+        item2 = other.item2;
+        return *this;
+    }
+
+    void swap(const SoaItemRef<T> &i) {
+        printf("Calling itemref swap.\n");
+        T tmp;
+        tmp = item1;
+        item1 = i.item1;
+        i.item1 = tmp;
+
+        tmp = item2;
+        item2 = i.item2;
+        i.item2 = tmp;
+    }
+};
+
+namespace std {
+template<typename T>
+void swap(SoaItemRef<T> &a, SoaItemRef<T> &b) {
+    a.swap(b);
+}
+}
+
+template<typename T>
+void swap(SoaItemRef<T> &a, SoaItemRef<T> &b) {
+    a.swap(b);
+}
+
+template<typename T>
 class Soa final {
 public:
 
-    struct SoaItem {
-        T item1;
-        T item2;
-    };
-
-    struct SoaItemRef {
-        T &item1;
-        T &item2;
-        SoaItemRef(T &i1, T &i2) : item1(i1), item2(i2) {
-        }
-
-        SoaItemRef(SoaItemRef && other) noexcept : item1(other.item1), item2(other.item2) {
-        }
-
-        SoaItemRef(const Soa<T>::SoaItemRef &other) noexcept : item1(other.item1), item2(other.item2) {
-        }
-
-        bool operator==(const Soa<T>::SoaItem &i) const noexcept {
-            return item1 == i.item1 && item2 == i.item2;
-        }
-
-        bool operator==(const Soa<T>::SoaItemRef &i) const noexcept {
-            return item1 == i.item1 && item2 == i.item2;
-        }
-
-        SoaItemRef& operator=(Soa<T>::SoaItemRef &&other) noexcept {
-            item1 = other.item1;
-            item2 = other.item2;
-            return *this;
-        }
-
-        SoaItemRef& operator=(const Soa<T>::SoaItemRef &other) noexcept {
-            item1 = other.item1;
-            item2 = other.item2;
-            return *this;
-        }
-
-        void swap(const Soa<T>::SoaItemRef &i) {
-            T tmp;
-            tmp = item1;
-            item1 = i.item1;
-            i.item1 = tmp;
-
-            tmp = item2;
-            item2 = i.item2;
-            i.item2 = tmp;
-        }
-    };
-    typedef SoaItemRef value_type;
+    typedef SoaItemRef<T> value_type;
 
     Soa() {}
     ~Soa() {}
@@ -287,17 +303,6 @@ private:
     std::vector<T> array2;
 };
 
-namespace std {
-template<typename T>
-void swap(typename Soa<T>::value_type &a, typename Soa<T>::value_type &b) {
-    a.swap(b);
-}
-}
-
-template<typename T>
-void swap(typename Soa<T>::value_type &a, typename Soa<T>::value_type &b) {
-    a.swap(b);
-}
 
 template<typename T>
 void Soa<T>::emplace_back(T &&t1, T &&t2) {
