@@ -9,7 +9,7 @@ void print_vector(const std::vector<int> &v) {
     }
     printf("\n");
 }
-#if 0
+
 void basic_test() {
     Soa<int> foo;
     assert(true);
@@ -53,12 +53,12 @@ void find_test() {
     foo.push_back(2, 2);
     foo.push_back(3, 3);
     foo.push_back(4, 4);
-    Soa<int>::SoaItem target{3, 3};
+    Soa<int>::swap_type target{3, 3};
 
     auto result = std::find(foo.begin(), foo.end(), target);
     assert(std::distance(foo.begin(), result) == 2);
 }
-#endif
+
 void swap_test() {
     int one=1;
     int two=2;
@@ -95,7 +95,7 @@ void sort_test() {
     assert(foo[0].item1 == 1);
     assert(foo[3].item2 == 4);
 }
-#if 0
+
 void elem_test() {
     std::vector<int> foobar{0, 1, 2, 3, 4};
     ElementProxy<int> p1(foobar, 0);
@@ -170,15 +170,14 @@ void sort_test2() {
     */
     assert(v1[0] == 4);
 }
-#endif
+
 int main(int, char **) {
-    /*
     basic_test();
     indexing_test();
     iterator_test();
     find_test();
     elem_test();
-    struct_test();*/
+    struct_test();
     swap_test();
     sort_test();
     //sort_test2();

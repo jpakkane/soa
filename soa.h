@@ -226,11 +226,11 @@ struct SoaItemRef {
     SoaItemRef(const SoaItemRef<T> &other) noexcept : item1(other.item1), item2(other.item2) {
     }
 
-    bool operator==(SoaItem<T> &i) const noexcept {
+    bool operator==(const SoaItem<T> &i) const noexcept {
         return item1 == i.item1 && item2 == i.item2;
     }
 
-    bool operator==(SoaItemRef<T> &i) const noexcept {
+    bool operator==(const SoaItemRef<T> &i) const noexcept {
         return item1 == i.item1 && item2 == i.item2;
     }
 
@@ -276,6 +276,7 @@ class Soa final {
 public:
 
     typedef SoaItemRef<T> value_type;
+    typedef SoaItem<T> swap_type;
 
     Soa() {}
     ~Soa() {}
